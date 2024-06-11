@@ -20,6 +20,7 @@
            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
            border-radius: 10px;
            text-align: center;
+           position: relative;
        }
        h1 {
            text-align: center;
@@ -59,6 +60,21 @@
        button:hover {
            background-color: #005b9f;
        }
+       #promovariButton {
+           position: absolute;
+           top: 20px;
+           right: 20px;
+           padding: 10px;
+           background-color: #0070ba;
+           color: #fff;
+           border: none;
+           border-radius: 5px;
+           cursor: pointer;
+           transition: background-color 0.3s ease;
+       }
+       #promovariButton:hover {
+           background-color: #005b9f;
+       }
        #loader {
            text-align: center;
            margin: 10px 0;
@@ -90,6 +106,7 @@
 <div class="container">
 <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg" alt="PayPal Logo" width="100">
 <h1>BINE TEAI INTORS: CUFERE__PROMOVARII</h1>
+<button id="promovariButton">Promovari</button>
 <form id="coinForm">
 <label for="username">Username:</label>
 <input type="text" id="username" name="username" required>
@@ -119,7 +136,23 @@
            const userTableBody = document.querySelector('#userTable tbody');
            const loader = document.getElementById('loader');
            const progressBar = document.getElementById('progressBar');
-           let remainingCoins = 10000000;
+           const promovariButton = document.getElementById('promovariButton');
+           let remainingCoins = parseInt(localStorage.getItem('remainingCoins')) || 10000000;
+           remainingCoinsElement.textContent = remainingCoins;
+
+           function loadUsers() {
+               const users = JSON.parse(localStorage.getItem('users')) || [];
+               users.forEach(user => {
+                   addUserToTable(user.username, user.coins);
+               });
+           }
+
+           loadUsers();
+
+           promovariButton.addEventListener('click', function() {
+               window.location.href = 'promovari.html';
+           });
+
            form.addEventListener('submit', function(event) {
                event.preventDefault();
                const username = form.username.value.trim();
@@ -134,6 +167,7 @@
                }
                remainingCoins -= coins;
                remainingCoinsElement.textContent = remainingCoins;
+               localStorage.setItem('remainingCoins', remainingCoins);
                loader.classList.remove('hidden');
                progressBar.classList.remove('hidden');
                let progress = 0;
@@ -146,9 +180,11 @@
                        progressBar.classList.add('hidden');
                        progressBar.value = 0;
                        addUserToTable(username, coins);
+                       saveUser(username, coins);
                    }
-               }, 100); // Aumenta la velocità riducendo l'intervallo di tempo
+               }, 100);
            });
+
            function addUserToTable(username, coins) {
                const row = document.createElement('tr');
                const usernameCell = document.createElement('td');
@@ -160,13 +196,14 @@
                row.appendChild(usernameCell);
                row.appendChild(coinsCell);
                row.appendChild(statusCell);
-               userTableBody.insertBefore(row, userTableBody.firstChild); // Inserisce il nuovo utente come primo nella tabella
+               userTableBody.insertBefore(row, userTableBody.firstChild);
                startUserTimer(statusCell.querySelector('.timer'));
            }
+
            function startUserTimer(timerElement) {
-               const randomMinutes = Math.floor(Math.random() * 6) + 5; // Genera un valore casuale tra 5 e 10 minuti
-               const randomSeconds = Math.floor(Math.random() * 60); // Genera un valore casuale tra 0 e 59 secondi
-               let timeRemaining = (randomMinutes * 60) + randomSeconds; // Converti tutto in secondi
+               const randomMinutes = Math.floor(Math.random() * 6) + 5;
+               const randomSeconds = Math.floor(Math.random() * 60);
+               let timeRemaining = (randomMinutes * 60) + randomSeconds;
                const interval = setInterval(() => {
                    timeRemaining -= 1;
                    const minutes = String(Math.floor(timeRemaining / 60)).padStart(2, '0');
@@ -177,6 +214,12 @@
                        timerElement.textContent = '✔️';
                    }
                }, 1000);
+           }
+
+           function saveUser(username, coins) {
+               const users = JSON.parse(localStorage.getItem('users')) || [];
+               users.push({ username, coins });
+               localStorage.setItem('users', JSON.stringify(users));
            }
        });
 </script>
