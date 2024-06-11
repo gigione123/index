@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Promovari</title>
+<style>
+       body {
+           font-family: Arial, sans-serif;
+           background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXcZ015ta9ziKzZn6k0QdwdGXOtEfSxx7i0w&s');
+           background-size: cover;
+           background-position: center;
+           color: #fff;
+           margin: 0;
+           padding: 0;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           height: 100vh;
+           position: relative;
+       }
+       h1 {
+           color: #fff;
+       }
+       button {
+           padding: 10px;
+           background-color: #0070ba;
+           color: #fff;
+           border: none;
+           border-radius: 5px;
+           cursor: pointer;
+           transition: background-color 0.3s ease;
+       }
+       button:hover {
+           background-color: #005b9f;
+       }
+       #moneziButton {
+           position: absolute;
+           top: 20px;
+           right: 20px;
+       }
+</style>
+</head>
+<body>
+<h1>Bine ai venit în pagina Promovari!</h1>
+<button id="moneziButton">Monezi</button>
+<script>
+       document.getElementById('moneziButton').addEventListener('click', function() {
+           window.location.href = 'index.html';
+       });
+</script>
+</body>
+</html>
